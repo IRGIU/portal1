@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -913,6 +913,38 @@
                 left: -0.5rem;
                 width: 8px;
                 height: 8px;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-nav-toggle {
+                display: none;
+            }
+            
+            .section-overlay {
+                display: none !important;
+            }
+            
+            .main-container {
+                grid-template-columns: 300px 1fr;
+                gap: 2rem;
+                padding: 2rem;
+            }
+            
+            .navigation-sidebar {
+                background: rgba(20, 25, 35, 0.9);
+                border-radius: 12px;
+                padding: 1.5rem;
+                border: 1px solid rgba(100, 181, 246, 0.2);
+                height: fit-content;
+                position: sticky;
+                top: 120px;
+                order: 1;
+            }
+            
+            .content-area {
+                order: 2;
+                padding: 2rem;
             }
         }
         
