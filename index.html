@@ -1,11 +1,11 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IRGIU Intelligence Portal - Secure Access</title>
 <script type="text/javascript">(function(w,s){var e=document.createElement("script");e.type="text/javascript";e.async=true;e.src="https://cdn-eu.pagesense.io/js/canvigroup131/6e0a406802b14554a7d044a69097e153.js";var x=document.getElementsByTagName("script")[0];x.parentNode.insertBefore(e,x);})(window,"script");</script>
-   <style>
+ <style>
         * {
             margin: 0;
             padding: 0;
@@ -710,14 +710,13 @@
             background: rgba(100, 181, 246, 0.9);
             border: none;
             color: white;
-            width: 50px;
-            height: 50px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 20px;
             z-index: 1001;
-            box-shadow: 0 4px 20px rgba(100, 181, 246, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
@@ -728,129 +727,129 @@
         .mobile-nav-toggle:hover {
             background: rgba(100, 181, 246, 1);
             transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(100, 181, 246, 0.6);
         }
         
         .mobile-nav-toggle:active {
             transform: scale(0.95);
         }
         
-        .section-overlay {
+        .mobile-sections-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
-        
-        .section-menu {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(25, 30, 40, 0.95);
-            border-radius: 12px;
-            padding: 2rem;
-            border: 1px solid rgba(100, 181, 246, 0.3);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(20px);
-            max-width: 90vw;
-            max-height: 80vh;
+            padding: 2rem 1rem;
             overflow-y: auto;
         }
         
-        .section-menu-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(100, 181, 246, 0.3);
-            padding-bottom: 1rem;
+        .mobile-sections-overlay.show {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
         }
         
-        .section-menu-title {
+        .mobile-overlay-header {
             color: #64b5f6;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: 600;
+            margin-bottom: 2rem;
+            text-align: center;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 0.5rem;
         }
         
-        .section-menu-subtitle {
-            color: #a0a0a0;
-            font-size: 0.9rem;
-        }
-        
-        .section-list {
+        .mobile-section-grid {
             display: grid;
-            gap: 0.8rem;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            width: 100%;
+            max-width: 400px;
         }
         
-        .section-item {
-            background: rgba(15, 20, 30, 0.8);
-            color: #e0e0e0;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
+        .mobile-section-item {
+            background: rgba(25, 30, 40, 0.9);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-            border: 1px solid rgba(100, 181, 246, 0.2);
-            text-align: left;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .section-item:hover, .section-item.active {
+        .mobile-section-item:hover, .mobile-section-item.active {
             background: rgba(100, 181, 246, 0.2);
-            color: #64b5f6;
-            border-color: rgba(100, 181, 246, 0.5);
+            border-color: rgba(100, 181, 246, 0.6);
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(100, 181, 246, 0.2);
+            box-shadow: 0 4px 12px rgba(100, 181, 246, 0.3);
         }
         
-        .overlay-close {
+        .mobile-section-item.restricted {
+            background: rgba(60, 60, 60, 0.5);
+            color: #999;
+            border-color: rgba(100, 100, 100, 0.3);
+            cursor: not-allowed;
+        }
+        
+        .mobile-section-item.restricted:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .mobile-section-title {
+            color: #e0e0e0;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .mobile-section-item.active .mobile-section-title {
+            color: #64b5f6;
+        }
+        
+        .mobile-section-item.restricted .mobile-section-title {
+            color: #999;
+        }
+        
+        .mobile-overlay-close {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 1rem;
+            right: 1rem;
             background: rgba(244, 67, 54, 0.8);
             border: none;
             color: white;
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
-        }
-        
-        .overlay-close:hover {
-            background: rgba(244, 67, 54, 1);
-            transform: scale(1.1);
         }
         
         @media (max-width: 768px) {
             .mobile-nav-toggle {
-                display: flex !important;
+                display: flex;
             }
             
             .main-container {
-                grid-template-columns: 1fr !important;
+                grid-template-columns: 1fr;
                 gap: 1rem;
                 padding: 1rem;
-                display: grid;
             }
             
             .navigation-sidebar {
-                position: static !important;
-                order: 2 !important;
+                position: static;
+                order: 2;
                 top: auto;
-                transform: none;
-                transition: none;
-                display: block;
                 background: rgba(20, 25, 35, 0.9);
                 border-radius: 12px;
                 padding: 1.5rem;
@@ -858,7 +857,7 @@
             }
             
             .content-area {
-                order: 1 !important;
+                order: 1;
                 padding: 1rem;
             }
             
@@ -917,41 +916,6 @@
             }
         }
         
-        @media (min-width: 769px) {
-            .mobile-nav-toggle {
-                display: none !important;
-            }
-            
-            .section-overlay {
-                display: none !important;
-            }
-            
-            .main-container {
-                grid-template-columns: 300px 1fr;
-                gap: 2rem;
-                padding: 2rem;
-                display: grid;
-            }
-            
-            .navigation-sidebar {
-                background: rgba(20, 25, 35, 0.9);
-                border-radius: 12px;
-                padding: 1.5rem;
-                border: 1px solid rgba(100, 181, 246, 0.2);
-                height: fit-content;
-                position: sticky;
-                top: 120px;
-                order: 1;
-                display: block;
-            }
-            
-            .content-area {
-                order: 2;
-                padding: 2rem;
-                display: block;
-            }
-        }
-        
         @media (max-width: 480px) {
             .login-box {
                 padding: 2rem 1.5rem;
@@ -977,19 +941,14 @@
             .content-area {
                 padding: 1rem 0.8rem;
             }
-            
-            .section-menu {
-                padding: 1.5rem;
-                max-width: 95vw;
-            }
-            
-            .section-menu-title {
-                font-size: 1rem;
-            }
         }
         
-        .nav-close {
-            display: none;
+        /* Hide mobile overlay elements on desktop */
+        @media (min-width: 769px) {
+            .mobile-nav-toggle,
+            .mobile-sections-overlay {
+                display: none !important;
+            }
         }
             .main-container {
                 grid-template-columns: 1fr;
@@ -1182,39 +1141,34 @@
             ⚠ RESTRICTED ACCESS - FELIX MARTIN ASSESSMENT ONLY ⚠
         </div>
 
-        <!-- Mobile Navigation Toggle Button -->
-        <button class="mobile-nav-toggle" id="mobileNavToggle" onclick="toggleSectionOverlay()">☰</button>
+        <!-- Mobile Floating Navigation Button -->
+        <button class="mobile-nav-toggle" id="mobileNavToggle" onclick="toggleMobileSections()">☰</button>
 
-        <!-- Section Selection Overlay -->
-        <div class="section-overlay" id="sectionOverlay" onclick="closeSectionOverlay(event)">
-            <div class="section-menu" onclick="event.stopPropagation()">
-                <button class="overlay-close" onclick="closeSectionOverlay()">&times;</button>
-                <div class="section-menu-header">
-                    <div class="section-menu-title">Assessment Modules</div>
-                    <div class="section-menu-subtitle">Felix Martin Intelligence Analysis</div>
+        <!-- Mobile Sections Overlay -->
+        <div class="mobile-sections-overlay" id="mobileSectionsOverlay">
+            <button class="mobile-overlay-close" onclick="closeMobileSections()">✕</button>
+            <div class="mobile-overlay-header">Intelligence Modules</div>
+            <div class="mobile-section-grid">
+                <div class="mobile-section-item" onclick="selectMobileSection('subject-overview')">
+                    <div class="mobile-section-title">01. Subject Overview & Profile</div>
                 </div>
-                <div class="section-list">
-                    <div class="section-item" onclick="navigateToSection('subject-overview')">
-                        01. Subject Overview & Profile
-                    </div>
-                    <div class="section-item" onclick="navigateToSection('career-analysis')">
-                        02. Career Trajectory Analysis
-                    </div>
-                    <div class="section-item" onclick="navigateToSection('financial-influence')">
-                        03. Financial Influence Assessment
-                    </div>
-                    <div class="section-item" onclick="navigateToSection('regulatory-position')">
-                        04. Regulatory Position Analysis
-                    </div>
-                    <div class="section-item" onclick="navigateToSection('contact-verification')">
-                        05. Contact Verification Protocol
-                    </div>
-                    <div class="section-item" onclick="navigateToSection('risk-assessment')">
-                        06. Comprehensive Risk Assessment
-                    </div>
-                    <div class="section-item" onclick="navigateToSection('recommendations')">
-                        07. Strategic Recommendations
-                    </div>
+                <div class="mobile-section-item" onclick="selectMobileSection('career-analysis')">
+                    <div class="mobile-section-title">02. Career Trajectory Analysis</div>
+                </div>
+                <div class="mobile-section-item" onclick="selectMobileSection('financial-influence')">
+                    <div class="mobile-section-title">03. Financial Influence Assessment</div>
+                </div>
+                <div class="mobile-section-item" onclick="selectMobileSection('regulatory-position')">
+                    <div class="mobile-section-title">04. Regulatory Position Analysis</div>
+                </div>
+                <div class="mobile-section-item" onclick="selectMobileSection('contact-verification')">
+                    <div class="mobile-section-title">05. Contact Verification Protocol</div>
+                </div>
+                <div class="mobile-section-item" onclick="selectMobileSection('risk-assessment')">
+                    <div class="mobile-section-title">06. Comprehensive Risk Assessment</div>
+                </div>
+                <div class="mobile-section-item" onclick="selectMobileSection('recommendations')">
+                    <div class="mobile-section-title">07. Strategic Recommendations</div>
                 </div>
             </div>
         </div>
@@ -2209,68 +2163,89 @@
             }
         });
 
-        // Section overlay functions
-        function toggleSectionOverlay() {
-            const overlay = document.getElementById('sectionOverlay');
-            if (overlay.style.display === 'block') {
-                closeSectionOverlay();
+        // Mobile navigation functions for floating sections overlay
+        function toggleMobileSections() {
+            const overlay = document.getElementById('mobileSectionsOverlay');
+            const toggle = document.getElementById('mobileNavToggle');
+            
+            if (overlay.classList.contains('show')) {
+                closeMobileSections();
             } else {
-                overlay.style.display = 'block';
+                overlay.classList.add('show');
+                toggle.innerHTML = '✕';
+                // Prevent body scroll when overlay is open
                 document.body.style.overflow = 'hidden';
-                
                 // Update active section in overlay
-                const currentSection = document.querySelector('.section-content.active');
-                if (currentSection) {
-                    const sectionId = currentSection.id;
-                    updateOverlayActiveState(sectionId);
-                }
+                updateMobileActiveSection();
             }
         }
         
-        function closeSectionOverlay(event) {
-            const overlay = document.getElementById('sectionOverlay');
-            const menu = overlay.querySelector('.section-menu');
+        function closeMobileSections() {
+            const overlay = document.getElementById('mobileSectionsOverlay');
+            const toggle = document.getElementById('mobileNavToggle');
             
-            // Only close if clicking on overlay background or close button
-            if (!event || event.target === overlay || event.target.classList.contains('overlay-close')) {
-                overlay.style.display = 'none';
-                document.body.style.overflow = '';
-            }
+            overlay.classList.remove('show');
+            toggle.innerHTML = '☰';
+            // Restore body scroll
+            document.body.style.overflow = '';
         }
         
-        function navigateToSection(sectionId) {
-            // Close overlay first
-            closeSectionOverlay();
-            
-            // Navigate to section
+        function selectMobileSection(sectionId) {
+            // Use the existing showSection function
             showSection(sectionId);
+            // Close the mobile overlay
+            closeMobileSections();
+        }
+        
+        function updateMobileActiveSection() {
+            // Get currently active section
+            const activeSection = document.querySelector('.section-content.active');
+            if (!activeSection) return;
             
-            // Update overlay active state
-            updateOverlayActiveState(sectionId);
-        }
-        
-        function updateOverlayActiveState(activeSectionId) {
-            const sectionItems = document.querySelectorAll('.section-item');
-            sectionItems.forEach(item => {
+            const activeSectionId = activeSection.id;
+            
+            // Update mobile section items
+            document.querySelectorAll('.mobile-section-item').forEach(item => {
                 item.classList.remove('active');
-                // Check if this item corresponds to the active section
-                const itemText = item.textContent.toLowerCase();
-                if ((activeSectionId === 'subject-overview' && itemText.includes('subject overview')) ||
-                    (activeSectionId === 'career-analysis' && itemText.includes('career trajectory')) ||
-                    (activeSectionId === 'financial-influence' && itemText.includes('financial influence')) ||
-                    (activeSectionId === 'regulatory-position' && itemText.includes('regulatory position')) ||
-                    (activeSectionId === 'contact-verification' && itemText.includes('contact verification')) ||
-                    (activeSectionId === 'risk-assessment' && itemText.includes('risk assessment')) ||
-                    (activeSectionId === 'recommendations' && itemText.includes('recommendations'))) {
-                    item.classList.add('active');
-                }
             });
+            
+            // Find and mark the corresponding mobile item as active
+            const sectionMappings = {
+                'subject-overview': 0,
+                'career-analysis': 1,
+                'financial-influence': 2,
+                'regulatory-position': 3,
+                'contact-verification': 4,
+                'risk-assessment': 5,
+                'recommendations': 6
+            };
+            
+            const sectionIndex = sectionMappings[activeSectionId];
+            if (sectionIndex !== undefined) {
+                const mobileItems = document.querySelectorAll('.mobile-section-item');
+                if (mobileItems[sectionIndex]) {
+                    mobileItems[sectionIndex].classList.add('active');
+                }
+            }
         }
         
-        // Close overlay when pressing Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeSectionOverlay();
+        // Close overlay when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const overlay = document.getElementById('mobileSectionsOverlay');
+            const toggle = document.getElementById('mobileNavToggle');
+            
+            if (window.innerWidth <= 768 && 
+                overlay.classList.contains('show') && 
+                !overlay.contains(event.target) && 
+                !toggle.contains(event.target)) {
+                closeMobileSections();
+            }
+        });
+        
+        // Close overlay on window resize to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeMobileSections();
             }
         });
         
@@ -2288,20 +2263,18 @@
             // Show selected section
             document.getElementById(sectionId).classList.add('active');
             
-            // Add active class to corresponding nav item in sidebar
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => {
-                const itemText = item.textContent.toLowerCase();
-                if ((sectionId === 'subject-overview' && itemText.includes('subject overview')) ||
-                    (sectionId === 'career-analysis' && itemText.includes('career trajectory')) ||
-                    (sectionId === 'financial-influence' && itemText.includes('financial influence')) ||
-                    (sectionId === 'regulatory-position' && itemText.includes('regulatory position')) ||
-                    (sectionId === 'contact-verification' && itemText.includes('contact verification')) ||
-                    (sectionId === 'risk-assessment' && itemText.includes('risk assessment')) ||
-                    (sectionId === 'recommendations' && itemText.includes('recommendations'))) {
-                    item.classList.add('active');
-                }
-            });
+            // Add active class to clicked nav item (desktop)
+            if (event && event.target && event.target.classList.contains('nav-item')) {
+                event.target.classList.add('active');
+            } else {
+                // For mobile or programmatic calls, find the corresponding nav item
+                const navItems = document.querySelectorAll('.nav-item');
+                navItems.forEach(item => {
+                    if (item.onclick && item.onclick.toString().includes(sectionId)) {
+                        item.classList.add('active');
+                    }
+                });
+            }
             
             // Scroll to top of content area
             document.querySelector('.content-area').scrollIntoView({ behavior: 'smooth' });
