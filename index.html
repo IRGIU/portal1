@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRGIU Intelligence Portal - Secure Access</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .login-box {
+            background: rgba(25, 30, 40, 0.95);
+            border-radius: 12px;
+            padding: 3rem;
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(20px);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            color: #64b5f6;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .login-subtitle {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .classification-warning {
+            background: linear-gradient(45deg, #d32f2f, #f44336);
+            color: white;
+            text-align: center;
+            padding: 0.8rem;
+            margin-bottom: 2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(15, 20, 30, 0.8);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #64b5f6;
+            box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: #666;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(100, 181, 246, 0.3);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            display: none;
+        }
+
+        .security-notice {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: #ffb74d;
+            text-align: center;
+        }
+
+        .main-portal {
+            display: none;
+        }
+
+        .disclaimer-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .disclaimer-box {
+            background: rgba(25, 30, 40, 0.98);
+            border-radius: 12px;
+            padding: 3rem;
+            border: 2px solid rgba(244, 67, 54, 0.5);
+            box-shadow: 0 20px 60px rgba(244, 67, 54, 0.3);
+            width: 100%;
+            max-width: 700px;
+            backdrop-filter: blur(20px);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .disclaimer-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(244, 67, 54, 0.3);
+            padding-bottom: 1rem;
+        }
+
+        .disclaimer-title {
+            font-size: 2rem;
+            color: #f44336;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .disclaimer-subtitle {
+            color: #ffab91;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .disclaimer-content {
+            color: #e0e0e0;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .disclaimer-content h3 {
+            color: #f44336;
+            margin: 1.5rem 0 0.5rem 0;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .disclaimer-content p {
+            margin-bottom: 1rem;
+        }
+
+        .disclaimer-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .disclaimer-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .disclaimer-warning {
+            background: linear-gradient(45deg, #d32f2f, #f44336);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            text-align: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .disclaimer-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .disclaimer-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .disclaimer-accept {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+        }
+
+        .disclaimer-accept:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .disclaimer-decline {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+
+        .disclaimer-decline:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(244, 67, 54, 0.3);
+        }
+
+        .disclaimer-checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.5rem 0;
+            gap: 0.5rem;
+        }
+
+        .disclaimer-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: #f44336;
+        }
+
+        .disclaimer-checkbox-label {
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .access-warning {
+            background: linear-gradient(45deg, #d32f2f, #f44336);
+            color: white;
+            text-align: center;
+            padding: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header {
+            background: rgba(20, 25, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(100, 181, 246, 0.3);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #64b5f6;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .access-level {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .clearance-badge {
+            background: linear-gradient(45deg, #d32f2f, #f44336);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .user-badge {
+            background: rgba(100, 181, 246, 0.2);
+            color: #64b5f6;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(100, 181, 246, 0.3);
+        }
+
+        .logout-btn {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(244, 67, 54, 0.3);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .navigation-sidebar {
+            background: rgba(20, 25, 35, 0.9);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(100, 181, 246, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-title {
+            color: #64b5f6;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            background: rgba(15, 20, 30, 0.6);
+            color: #a0a0a0;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            border: 1px solid rgba(100, 181, 246, 0.1);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(100, 181, 246, 0.1);
+            color: #64b5f6;
+            border-color: rgba(100, 181, 246, 0.3);
+            transform: translateX(5px);
+        }
+
+        .nav-item.restricted {
+            background: rgba(50, 50, 50, 0.3);
+            color: #666;
+            cursor: not-allowed;
+            border-color: rgba(100, 100, 100, 0.2);
+        }
+
+        .nav-item.restricted:hover {
+            transform: none;
+            background: rgba(50, 50, 50, 0.3);
+            color: #666;
+        }
+
+        .content-area {
+            background: rgba(25, 30, 40, 0.8);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(100, 181, 246, 0.2);
+            min-height: 800px;
+        }
+
+        .section-content {
+            display: none;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        .classification-header {
+            background: linear-gradient(90deg, #d32f2f, #f44336);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            margin: -2rem -2rem 2rem -2rem;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            color: #64b5f6;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(100, 181, 246, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        .subsection-title {
+            color: #81c784;
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .meta-item {
+            background: rgba(15, 20, 30, 0.6);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid #64b5f6;
+        }
+
+        .meta-label {
+            font-size: 0.8rem;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .meta-value {
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        .content-text {
+            color: #d0d0d0;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-text p {
+            margin-bottom: 1rem;
+        }
+
+        .content-text ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-text li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(100, 181, 246, 0.1);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .critical-box {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #f44336;
+        }
+
+        .employment-timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 2rem 0;
+        }
+
+        .employment-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #64b5f6, rgba(100, 181, 246, 0.3));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -0.75rem;
+            top: 0.3rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #64b5f6;
+            border: 2px solid rgba(25, 30, 40, 1);
+        }
+
+        .timeline-period {
+            color: #64b5f6;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-role {
+            color: #e0e0e0;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-details {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .risk-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .risk-item {
+            background: rgba(15, 20, 30, 0.8);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(100, 181, 246, 0.2);
+        }
+
+        .risk-title {
+            color: #64b5f6;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-level {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-low {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        .risk-moderate {
+            background: rgba(255, 152, 0, 0.2);
+            color: #ff9800;
+            border: 1px solid #ff9800;
+        }
+
+        .risk-high {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+
+        .contact-details {
+            background: rgba(15, 20, 30, 0.6);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 3px solid #ff9800;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(100, 181, 246, 0.3);
+            z-index: 1000;
+        }
+
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #64b5f6, #42a5f5);
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        .mobile-nav-toggle {
+            display: none;
+            background: rgba(100, 181, 246, 0.2);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            color: #64b5f6;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .mobile-nav-toggle:hover {
+            background: rgba(100, 181, 246, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-nav-toggle {
+                display: block;
+            }
+            
+            .navigation-sidebar {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: rgba(20, 25, 35, 0.98);
+                z-index: 1000;
+                overflow-y: auto;
+                padding: 2rem 1rem;
+            }
+            
+            .navigation-sidebar.mobile-open {
+                display: block;
+            }
+            
+            .nav-close {
+                display: block;
+                background: rgba(244, 67, 54, 0.2);
+                border: 1px solid rgba(244, 67, 54, 0.3);
+                color: #f44336;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
+                width: 100%;
+            }
+            
+            .nav-close:hover {
+                background: rgba(244, 67, 54, 0.3);
+            }
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .navigation-sidebar {
+                position: static;
+                order: 2;
+                top: auto;
+            }
+            
+            .content-area {
+                order: 1;
+                padding: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .subsection-title {
+                font-size: 1.2rem;
+            }
+            
+            .meta-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .risk-matrix {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .access-level {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .logo {
+                font-size: 1.4rem;
+            }
+            
+            .nav-item {
+                font-size: 0.8rem;
+                padding: 0.6rem 0.8rem;
+            }
+            
+            .timeline-item {
+                padding-left: 1rem;
+            }
+            
+            .employment-timeline {
+                padding-left: 1rem;
+            }
+            
+            .employment-timeline::before {
+                left: 0.3rem;
+            }
+            
+            .timeline-item::before {
+                left: -0.5rem;
+                width: 8px;
+                height: 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 2rem 1.5rem;
+            }
+            
+            .disclaimer-box {
+                padding: 2rem 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+            
+            .classification-header {
+                font-size: 0.7rem;
+                padding: 0.6rem 1rem;
+            }
+            
+            .nav-title {
+                font-size: 0.9rem;
+            }
+            
+            .content-area {
+                padding: 1rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Portal -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <div class="login-header">
+                <div class="login-title">IRGIU Portal</div>
+                <div class="login-subtitle">Secure Access Required</div>
+            </div>
+            
+            <div class="classification-warning">
+                ⚠ Restricted Intelligence System ⚠
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="username">User Identifier</label>
+                    <input type="text" id="username" class="form-input" placeholder="Enter user ID" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">Access Code</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter access code" required>
+                </div>
+                
+                <button type="submit" class="login-button">Authenticate</button>
+                
+                <div class="error-message" id="errorMessage">
+                    Access denied. Invalid credentials.
+                </div>
+            </form>
+            
+            <div class="security-notice">
+                <strong>Security Notice:</strong> This system is monitored. Unauthorized access attempts are logged and may result in prosecution.
+            </div>
+        </div>
+    </div>
+
+    <!-- Disclaimer Modal -->
+    <div class="disclaimer-container" id="disclaimerContainer">
+        <div class="disclaimer-box">
+            <div class="disclaimer-header">
+                <div class="disclaimer-title">⚠ Legal Disclaimer ⚠</div>
+                <div class="disclaimer-subtitle">IRGIU Intelligence Platform</div>
+            </div>
+            
+            <div class="disclaimer-content">
+                <div class="disclaimer-warning">
+                    Read Carefully Before Proceeding
+                </div>
+                
+                <h3>No Liability Disclaimer</h3>
+                <p>By accessing and using the IRGIU Intelligence Platform (the "Platform"), you acknowledge and agree that:</p>
+                
+                <ul>
+                    <li><strong>Information Accuracy:</strong> All intelligence reports, assessments, and analyses provided are based on publicly available information (OSINT) and may contain inaccuracies, outdated information, or unverified claims.</li>
+                    <li><strong>No Warranty:</strong> IRGIU makes no representations or warranties regarding the accuracy, completeness, reliability, or timeliness of any information provided through this Platform.</li>
+                    <li><strong>Independent Verification:</strong> Users are solely responsible for independently verifying any information before taking action based on Platform content.</li>
+                    <li><strong>No Legal or Professional Advice:</strong> Nothing on this Platform constitutes legal, professional, or actionable intelligence advice. Consult appropriate professionals for specific guidance.</li>
+                </ul>
+                
+                <h3>Limitation of Liability</h3>
+                <p>IRGIU, its officers, employees, contractors, and affiliates shall not be liable for:</p>
+                
+                <ul>
+                    <li>Any direct, indirect, incidental, consequential, or punitive damages arising from Platform use</li>
+                    <li>Decisions made based on Platform information or assessments</li>
+                    <li>Any harm, damage, or loss resulting from reliance on Platform content</li>
+                    <li>Errors, omissions, or inaccuracies in intelligence reports or risk assessments</li>
+                </ul>
+                
+                <div class="disclaimer-checkbox-container">
+                    <input type="checkbox" id="disclaimerCheckbox" class="disclaimer-checkbox">
+                    <label for="disclaimerCheckbox" class="disclaimer-checkbox-label">
+                        I have read, understood, and agree to the above terms and disclaimer
+                    </label>
+                </div>
+            </div>
+            
+            <div class="disclaimer-actions">
+                <button class="disclaimer-btn disclaimer-decline" onclick="declineDisclaimer()">Decline & Exit</button>
+                <button class="disclaimer-btn disclaimer-accept" onclick="acceptDisclaimer()" id="acceptBtn" disabled>Accept & Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Portal -->
+    <div class="main-portal" id="mainPortal">
+        <div class="access-warning">
+            ⚠ RESTRICTED ACCESS - FELIX MARTIN ASSESSMENT ONLY ⚠
+        </div>
+
+        <div class="scroll-indicator">
+            <div class="scroll-progress" id="scrollProgress"></div>
+        </div>
+
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">IRGIU Intelligence Portal</div>
+                <div class="access-level">
+                    <div class="user-badge">Financial Intelligence Access</div>
+                    <div class="clearance-badge">Restricted</div>
+                    <div class="logout-btn" onclick="logout()">Logout</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-container">
+            <div class="navigation-sidebar" id="navigationSidebar">
+                <button class="nav-close" onclick="closeMobileNav()">✕ Close Menu</button>
+                
+                <div class="nav-section">
+                    <div class="nav-title">Investigation Modules</div>
+                    <div class="nav-item active" onclick="showSection('subject-overview')">
+                        01. Subject Overview & Profile
+                    </div>
+                    <div class="nav-item" onclick="showSection('career-analysis')">
+                        02. Career Trajectory Analysis
+                    </div>
+                    <div class="nav-item" onclick="showSection('financial-influence')">
+                        03. Financial Influence Assessment
+                    </div>
+                    <div class="nav-item" onclick="showSection('regulatory-position')">
+                        04. Regulatory Position Analysis
+                    </div>
+                    <div class="nav-item" onclick="showSection('contact-verification')">
+                        05. Contact Verification Protocol
+                    </div>
+                    <div class="nav-item" onclick="showSection('risk-assessment')">
+                        06. Comprehensive Risk Assessment
+                    </div>
+                    <div class="nav-item" onclick="showSection('recommendations')">
+                        07. Strategic Recommendations
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">Platform Features</div>
+                    <div class="nav-item restricted">
+                        📊 Daily Intelligence Brief
+                    </div>
+                    <div class="nav-item restricted">
+                        🌍 Regional Analysis
+                    </div>
+                    <div class="nav-item restricted">
+                        📈 Financial Markets Monitor
+                    </div>
+                    <div class="nav-item restricted">
+                        🔔 Alert System
+                    </div>
+                    <div class="nav-item restricted">
+                        📱 Contact Database
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">Quick Actions</div>
+                    <div class="nav-item" onclick="downloadReport()">
+                        📄 Download Assessment
+                    </div>
+                    <div class="nav-item restricted">
+                        🖨️ Print Report
+                    </div>
+                    <div class="nav-item restricted">
+                        📤 Share (Classified)
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <button class="mobile-nav-toggle" onclick="toggleMobileNav()">☰ Navigation Menu</button>
+                
+                <!-- Section 1: Subject Overview -->
+                <div class="section-content active" id="subject-overview">
+                    <div class="classification-header">
+                        Financial Intelligence Assessment - Felix Martin
+                    </div>
+                    
+                    <h1 class="section-title">01. Subject Overview & Profile</h1>
+                    
+                    <div class="meta-grid">
+                        <div class="meta-item">
+                            <div class="meta-label">Assessment Date</div>
+                            <div class="meta-value">16 July 2025, 16:00 BST</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Subject</div>
+                            <div class="meta-value">Felix Martin</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Classification</div>
+                            <div class="meta-value">Financial Intelligence Assessment</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Prepared By</div>
+                            <div class="meta-value">Financial Intelligence Unit</div>
+                        </div>
+                    </div>
+
+                    <h2 class="subsection-title">Subject Identification</h2>
+                    <div class="content-text">
+                        <p><strong>Full Name:</strong> Felix Martin</p>
+                        <p><strong>Nationality:</strong> United Kingdom</p>
+                        <p><strong>Current Location:</strong> London, UK</p>
+                        <p><strong>Primary Occupation:</strong> Economist, Fund Manager, Author, Regulatory Advisor</p>
+                        <p><strong>Years of Experience:</strong> 25+ years in international finance and economics</p>
+                    </div>
+
+                    <h2 class="subsection-title">Educational Background</h2>
+                    <div class="content-text">
+                        <p>Felix Martin demonstrates a sophisticated educational profile spanning multiple disciplines and international institutions:</p>
+                        <ul>
+                            <li><strong>D.Phil. in Economics:</strong> Oxford University</li>
+                            <li><strong>Master's Degrees:</strong> International Relations and Economics</li>
+                            <li><strong>Bachelor's Degree:</strong> Classics</li>
+                            <li><strong>International Experience:</strong> Education in UK, Italy, and United States</li>
+                            <li><strong>Special Recognition:</strong> Fulbright Scholar at Johns Hopkins SAIS</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="subsection-title">Professional Profile Summary</h2>
+                    <div class="content-text">
+                        <p>Felix Martin represents a hybrid figure bridging academic economics, high-stakes fund management, and regulatory oversight. His career demonstrates progression from multilateral development work through private asset management to regulatory influence, culminating in significant positions within both private financial markets and UK regulatory apparatus.</p>
+                        
+                        <p>His professional evolution suggests an individual with deep understanding of both theoretical economics and practical financial markets, positioned to influence policy at the highest levels while maintaining substantial private sector interests.</p>
+                    </div>
+
+                    <h2 class="subsection-title">Current Positions and Influence</h2>
+                    <div class="content-text">
+                        <p><strong>Financial Conduct Authority (FCA):</strong> Inaugural Chair of the independent Cost Benefit Analysis Panel (appointed May 1, 2024, approved by HM Treasury)</p>
+                        <p><strong>Private Sector:</strong> Partner at 1167 Capital, involvement with Liontrust Asset Management PLC</p>
+                        <p><strong>Academic:</strong> MBA program instructor at Oxford University</p>
+                        <p><strong>Think Tank Affiliations:</strong> Non-Resident Senior Fellow at Center for Global Development (Washington, DC)</p>
+                        <p><strong>Research Associations:</strong> Institute for New Economic Thinking (New York), Centre for Global Studies (London)</p>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h3 style="color: #64b5f6; margin-bottom: 1rem;">Key Intelligence Indicators</h3>
+                        <p><strong>Regulatory Influence:</strong> Direct involvement in FCA policy development through CBA Panel leadership</p>
+                        <p><strong>Financial Market Access:</strong> Management of funds exceeding $5 billion in total assets</p>
+                        <p><strong>International Networks:</strong> Connections spanning Washington DC, London, and European financial centers</p>
+                        <p><strong>Academic Platform:</strong> Oxford University position provides intellectual influence and recruitment opportunities</p>
+                    </div>
+
+                    <h2 class="subsection-title">Public Intellectual Profile</h2>
+                    <div class="content-text">
+                        <p><strong>Published Works:</strong> "Money: The Unauthorised Biography" (2013) - translated into 14 countries and 10 languages, named Financial Times Economics Book of the Year</p>
+                        <p><strong>Media Presence:</strong> Regular contributor to New York Review of Books, Financial Times, Guardian, New Statesman; Reuters columnist since April 2023</p>
+                        <p><strong>Speaking Circuit:</strong> International conferences, advisory roles to institutional investors, governments, and corporate leaders</p>
+                        <p><strong>Intellectual Positioning:</strong> Contrarian approach to orthodox economic theory, challenges traditional monetary concepts</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3 style="color: #ff9800; margin-bottom: 1rem;">Intelligence Assessment</h3>
+                        <p>Felix Martin represents a high-value intelligence target due to his unique position at the intersection of regulatory policy, private financial markets, and public intellectual discourse. His ability to influence both market conditions and regulatory frameworks creates significant leverage points for economic intelligence collection and potential influence operations.</p>
+                    </div>
+                </div>
+
+                <!-- Section 2: Career Analysis -->
+                <div class="section-content" id="career-analysis">
+                    <div class="classification-header">
+                        Career Trajectory and Network Analysis
+                    </div>
+                    
+                    <h1 class="section-title">02. Career Trajectory Analysis</h1>
+                    
+                    <h2 class="subsection-title">Professional Timeline</h2>
+                    <div class="employment-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-period">2024 - Present</div>
+                            <div class="timeline-role">Financial Conduct Authority - CBA Panel Chair</div>
+                            <div class="timeline-details">
+                                Inaugural Chair of the independent Cost Benefit Analysis Panel, appointed May 1, 2024, with HM Treasury approval. This position grants significant influence over regulatory impact assessments for UK financial services sector.
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-period">2023 - Present</div>
+                            <div class="timeline-role">Reuters - Financial Columnist</div>
+                            <div class="timeline-details">
+                                Regular columnist since April 2023, providing economic analysis and commentary to global audience. Platform provides significant influence over financial market narratives and policy discussions.
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-period">2008 - Present</div>
+                            <div class="timeline-role">Private Fund Management - Senior Roles</div>
+                            <div class="timeline-details">
+                                Thames River Capital (Economist and Investment Analyst), Liontrust Asset Management (Co-manager of Global Strategic Bond Fund), Co-founder of $630 million specialist fund management business. Peak assets under management exceeding $5 billion across bond, currency, and credit markets.
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-period">2002 - 2008</div>
+                            <div class="timeline-role">European Stability Initiative - General Secretary</div>
+                            <div class="timeline-details">
+                                Based in Berlin, focused on policy analysis for the Balkans region. This role provided exposure to European policy networks and post-conflict reconstruction dynamics.
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-period">1998 - 2008</div>
+                            <div class="timeline-role">World Bank - Reconstruction Specialist</div>
+                            <div class="timeline-details">
+                                Worked on reconstruction of former Yugoslavia, with specific focus on energy sectors in Bosnia and Herzegovina, Serbia, and Kosovo. This role provided early exposure to post-conflict economics and international development finance.
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="subsection-title">Career Pattern Analysis</h2>
+                    <div class="content-text">
+                        <p><strong>Public-Private Sector Bridge:</strong> Martin's career demonstrates deliberate movement between public sector roles (World Bank, ESI, FCA) and private financial markets, creating valuable dual perspectives and network access.</p>
+                        
+                        <p><strong>Geographic Mobility:</strong> Experience spans Washington DC (World Bank), Berlin (ESI), London (financial markets), with educational exposure to US and European institutions, suggesting comfort with international networks and cross-border operations.</p>
+                        
+                        <p><strong>Expertise Evolution:</strong> Progression from post-conflict reconstruction through policy analysis to financial markets and regulatory oversight demonstrates adaptability and accumulating influence across related sectors.</p>
+                        
+                        <p><strong>Timing Considerations:</strong> Entry into private fund management coincided with 2008 financial crisis, suggesting ability to capitalize on market disruptions. Current regulatory role positions him to influence post-pandemic financial regulations.</p>
+                    </div>
+
+                    <div class="risk-matrix">
+                        <div class="risk-item">
+                            <div class="risk-title">Network Access Level</div>
+                            <div class="risk-level risk-high">High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Extensive connections across academic, regulatory, and private financial sectors in multiple countries.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Influence Potential</div>
+                            <div class="risk-level risk-high">High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Direct regulatory influence combined with substantial private market positions creates significant leverage points.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Intelligence Value</div>
+                            <div class="risk-level risk-high">High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Unique position provides access to both policy formation and market implementation perspectives.</p>
+                        </div>
+                    </div>
+
+                    <h2 class="subsection-title">Professional Network Assessment</h2>
+                    <div class="content-text">
+                        <p><strong>LinkedIn Connections:</strong> Over 500 professional connections, indicating extensive network across finance, academia, and policy sectors.</p>
+                        
+                        <p><strong>Collaborative Relationships:</strong> Known partnerships include Michael Mabbutt (Liontrust co-manager), FCA and PSR panel members, Center for Global Development fellows.</p>
+                        
+                        <p><strong>Institutional Affiliations:</strong> Multiple concurrent affiliations suggest maintained relationships across various organizations rather than exclusive loyalties.</p>
+                        
+                        <p><strong>Academic Networks:</strong> Oxford University teaching role provides access to emerging talent pipeline and academic research networks.</p>
+                    </div>
+
+                    <div class="critical-box">
+                        <h3 style="color: #f44336; margin-bottom: 1rem;">Strategic Assessment</h3>
+                        <p>Felix Martin's career trajectory demonstrates systematic accumulation of influence across interconnected sectors. His progression suggests either exceptional strategic planning or potential coordination with external interests seeking to position assets within UK financial regulatory apparatus. The combination of private market expertise and regulatory authority creates unprecedented leverage for economic intelligence operations.</p>
+                    </div>
+                </div>
+
+                <!-- Section 3: Financial Influence -->
+                <div class="section-content" id="financial-influence">
+                    <div class="classification-header">
+                        Financial Influence and Market Position Assessment
+                    </div>
+                    
+                    <h1 class="section-title">03. Financial Influence Assessment</h1>
+                    
+                    <h2 class="subsection-title">Asset Management Portfolio</h2>
+                    <div class="content-text">
+                        <p><strong>Total Assets Under Management:</strong> Peak assets exceeding $5 billion across multiple fund categories</p>
+                        <p><strong>Specialist Fund Business:</strong> Co-founded $630 million specialist fund management operation</p>
+                        <p><strong>Investment Focus:</strong> Bond, currency, and credit markets with particular expertise in sovereign and corporate fixed-income securities</p>
+                        <p><strong>Geographic Scope:</strong> Global investment mandate with specific experience in European and emerging markets</p>
+                    </div>
+
+                    <div class="risk-matrix">
+                        <div class="risk-item">
+                            <div class="risk-title">Market Moving Capacity</div>
+                            <div class="risk-level risk-high">High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">$5+ billion AUM provides significant market influence, particularly in bond and currency markets.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Sovereign Debt Exposure</div>
+                            <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Fixed-income specialization suggests substantial exposure to government securities and policy-sensitive instruments.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Currency Market Influence</div>
+                            <div class="risk-level risk-moderate">Moderate to High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Currency trading capabilities combined with regulatory knowledge creates potential for coordinated market operations.</p>
+                        </div>
+                    </div>
+
+                    <h2 class="subsection-title">Investment Strategy and Philosophy</h2>
+                    <div class="content-text">
+                        <p><strong>Contrarian Approach:</strong> Martin's published work challenges orthodox economic theory, suggesting willingness to take positions against conventional market wisdom.</p>
+                        
+                        <p><strong>Money Theory Innovation:</strong> His book "Money: The Unauthorised Biography" proposes money as social technology rather than commodity, indicating sophisticated understanding of monetary policy mechanisms.</p>
+                        
+                        <p><strong>Crisis Expertise:</strong> Entry into fund management during 2008 financial crisis suggests ability to profit from market dislocations and policy responses.</p>
+                        
+                        <p><strong>Regulatory Arbitrage:</strong> Combination of regulatory knowledge and private market position creates opportunities for regulatory arbitrage strategies.</p>
+                    </div>
+
+                    <h2 class="subsection-title">Institutional Client Base</h2>
+                    <div class="content-text">
+                        <p><strong>Government Advisory:</strong> Known to advise institutional investors, governments, and corporate leaders on economic risks</p>
+                        <p><strong>Pension Funds:</strong> Likely exposure to large pension fund mandates given bond market specialization</p>
+                        <p><strong>Sovereign Wealth:</strong> Experience with sovereign debt markets suggests potential sovereign wealth fund relationships</p>
+                        <p><strong>Central Bank Networks:</strong> Regulatory position and academic credentials provide access to central banking circles</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3 style="color: #ff9800; margin-bottom: 1rem;">Conflict of Interest Assessment</h3>
+                        <p><strong>Regulatory-Private Overlap:</strong> Simultaneous roles in FCA Cost Benefit Analysis and private fund management create inherent conflicts of interest.</p>
+                        <p><strong>Policy Influence:</strong> Ability to influence regulatory policies that directly impact his private investment strategies.</p>
+                        <p><strong>Information Asymmetry:</strong> Access to regulatory discussions before public announcements provides significant trading advantages.</p>
+                        <p><strong>Market Intelligence:</strong> Position enables collection of both policy and market intelligence for potential external coordination.</p>
+                    </div>
+
+                    <h2 class="subsection-title">Financial Network Analysis</h2>
+                    <div class="content-text">
+                        <p><strong>Thames River Capital:</strong> London-based investment management firm with European focus, providing access to continental financial networks.</p>
+                        
+                        <p><strong>Liontrust Asset Management:</strong> UK-based asset manager with global reach, listed company with transparency requirements.</p>
+                        
+                        <p><strong>1167 Capital:</strong> Current partnership role suggests continued private market involvement alongside regulatory duties.</p>
+                        
+                        <p><strong>Michael Mabbutt Partnership:</strong> Long-term collaboration indicates stable professional relationships and shared investment philosophy.</p>
+                    </div>
+
+                    <h2 class="subsection-title">Market Impact Indicators</h2>
+                    <div class="content-text">
+                        <p><strong>Media Influence:</strong> Reuters column and Financial Times contributions provide platform to move markets through commentary.</p>
+                        
+                        <p><strong>Speaking Circuit:</strong> International conference presentations to institutional investors amplify market influence.</p>
+                        
+                        <p><strong>Academic Platform:</strong> Oxford University teaching position provides credibility and thought leadership platform.</p>
+                        
+                        <p><strong>Book Authority:</strong> "Money: The Unauthorised Biography" establishes intellectual authority on monetary policy and financial systems.</p>
+                    </div>
+
+                    <div class="critical-box">
+                        <h3 style="color: #f44336; margin-bottom: 1rem;">Financial Intelligence Conclusion</h3>
+                        <p>Felix Martin represents a unique combination of substantial financial market influence and regulatory authority. His $5+ billion asset management capability, combined with FCA policy influence and media platform, creates unprecedented leverage for economic intelligence operations. The inherent conflicts of interest in his position suggest either inadequate oversight or deliberate positioning for external coordination purposes.</p>
+                    </div>
+                </div>
+
+                <!-- Section 4: Regulatory Position -->
+                <div class="section-content" id="regulatory-position">
+                    <div class="classification-header">
+                        Regulatory Position and Policy Influence Analysis
+                    </div>
+                    
+                    <h1 class="section-title">04. Regulatory Position Analysis</h1>
+                    
+                    <h2 class="subsection-title">Financial Conduct Authority Role</h2>
+                    <div class="content-text">
+                        <p><strong>Position:</strong> Inaugural Chair of the independent Cost Benefit Analysis (CBA) Panel</p>
+                        <p><strong>Appointment Date:</strong> May 1, 2024</p>
+                        <p><strong>Authorization:</strong> Approved by HM Treasury</p>
+                        <p><strong>Mandate:</strong> Independent assessment of regulatory costs and benefits for UK financial services sector</p>
+                        <p><strong>Reporting Structure:</strong> Independent panel with direct reporting to FCA leadership and HM Treasury</p>
+                    </div>
+
+                    <h2 class="subsection-title">Regulatory Influence Assessment</h2>
+                    <div class="content-text">
+                        <p><strong>Policy Formation Impact:</strong> CBA Panel recommendations directly influence regulatory implementation and modification decisions across the UK financial services sector.</p>
+                        
+                        <p><strong>Industry-Wide Reach:</strong> Panel assessments affect banks, insurance companies, investment firms, payment providers, and fintech companies operating in UK markets.</p>
+                        
+                        <p><strong>International Implications:</strong> UK regulatory decisions influence global financial standards through London's role as international financial center.</p>
+                        
+                        <p><strong>Timing Sensitivity:</strong> Position provides advance knowledge of regulatory changes before public announcement, creating significant information advantages.</p>
+                    </div>
+
+                    <div class="risk-matrix">
+                        <div class="risk-item">
+                            <div class="risk-title">Regulatory Capture Risk</div>
+                            <div class="risk-level risk-high">High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Private sector background and ongoing financial interests create substantial regulatory capture potential.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Information Asymmetry</div>
+                            <div class="risk-level risk-high">High (5/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Access to regulatory discussions before public disclosure provides significant trading and positioning advantages.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Policy Coordination Potential</div>
+                            <div class="risk-level risk-high">High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Position enables coordination between regulatory policy and private market strategies.</p>
+                        </div>
+                    </div>
+
+                    <h2 class="subsection-title">Conflict of Interest Analysis</h2>
+                    <div class="content-text">
+                        <p><strong>Direct Financial Conflicts:</strong></p>
+                        <ul>
+                            <li>Ongoing partnership at 1167 Capital while serving as FCA CBA Panel Chair</li>
+                            <li>Continued involvement with Liontrust Asset Management during regulatory tenure</li>
+                            <li>Historical fund management positions affecting current market positions</li>
+                            <li>Potential client overlaps between private funds and regulated entities</li>
+                        </ul>
+                        
+                        <p><strong>Indirect Influence Channels:</strong></p>
+                        <ul>
+                            <li>Media commentary through Reuters column while in regulatory position</li>
+                            <li>Academic platform at Oxford University during regulatory service</li>
+                            <li>Speaking engagements to institutional investors and government officials</li>
+                            <li>Think tank affiliations providing additional influence channels</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="subsection-title">Regulatory Network Assessment</h2>
+                    <div class="content-text">
+                        <p><strong>FCA Internal Networks:</strong> CBA Panel Chair position provides access to senior FCA leadership, policy development teams, and enforcement divisions.</p>
+                        
+                        <p><strong>HM Treasury Connections:</strong> Treasury approval process and ongoing reporting relationships create direct connections to UK fiscal policy apparatus.</p>
+                        
+                        <p><strong>Bank of England Proximity:</strong> Regulatory coordination requirements provide access to monetary policy and financial stability discussions.</p>
+                        
+                        <p><strong>International Regulatory Networks:</strong> UK's role in global financial regulation provides access to international regulatory coordination mechanisms.</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3 style="color: #ff9800; margin-bottom: 1rem;">Regulatory Intelligence Implications</h3>
+                        <p><strong>Policy Preview Access:</strong> Position provides advance intelligence on regulatory changes affecting global financial markets.</p>
+                        <p><strong>Enforcement Intelligence:</strong> Access to regulatory enforcement discussions and priorities.</p>
+                        <p><strong>Industry Intelligence:</strong> CBA Panel work provides detailed intelligence on financial industry structures, vulnerabilities, and strategies.</p>
+                        <p><strong>International Coordination:</strong> Access to international regulatory coordination discussions and policy harmonization efforts.</p>
+                    </div>
+
+                    <h2 class="subsection-title">Historical Precedent Analysis</h2>
+                    <div class="content-text">
+                        <p><strong>Revolving Door Patterns:</strong> Martin's appointment continues established pattern of private sector professionals moving into regulatory roles, raising questions about independence and capture.</p>
+                        
+                        <p><strong>Timing Coincidence:</strong> Appointment during period of post-pandemic regulatory review and potential policy changes maximizes influence potential.</p>
+                        
+                        <p><strong>Selection Process:</strong> HM Treasury approval suggests political dimension to appointment beyond technical qualifications.</p>
+                        
+                        <p><strong>Term Structure:</strong> Independent panel structure with undefined tenure provides flexibility for extended influence period.</p>
+                    </div>
+
+                    <h2 class="subsection-title">Oversight and Accountability Mechanisms</h2>
+                    <div class="content-text">
+                        <p><strong>Disclosure Requirements:</strong> Limited public information available regarding conflict of interest management or disclosure protocols.</p>
+                        
+                        <p><strong>Independence Safeguards:</strong> "Independent" panel designation lacks specific details regarding independence criteria or enforcement mechanisms.</p>
+                        
+                        <p><strong>Transparency Measures:</strong> No evidence of public reporting requirements for CBA Panel deliberations or recommendations.</p>
+                        
+                        <p><strong>Accountability Structure:</strong> Unclear accountability mechanisms for panel recommendations or potential conflicts of interest.</p>
+                    </div>
+
+                    <div class="critical-box">
+                        <h3 style="color: #f44336; margin-bottom: 1rem;">Regulatory Position Assessment</h3>
+                        <p>Felix Martin's position as FCA CBA Panel Chair represents a significant vulnerability in UK financial regulatory architecture. The combination of substantial private financial interests, limited transparency requirements, and broad policy influence creates optimal conditions for regulatory capture or external coordination. The absence of clear conflict management protocols suggests either inadequate oversight or deliberate positioning for non-transparent influence operations.</p>
+                    </div>
+                </div>
+
+                <!-- Section 5: Contact Verification -->
+                <div class="section-content" id="contact-verification">
+                    <div class="classification-header">
+                        Contact Verification and Communication Analysis
+                    </div>
+                    
+                    <h1 class="section-title">05. Contact Verification Protocol</h1>
+                    
+                    <h2 class="subsection-title">Contact Information Analysis</h2>
+                    <div class="contact-details">
+                        <p><strong>Investigated Number:</strong> +44 7918 004312</p>
+                        <p><strong>Associated Profile:</strong> "Consultant" WhatsApp Business profile</p>
+                        <p><strong>Public Attribution:</strong> No verified connection to Felix Martin</p>
+                        <p><strong>Verification Status:</strong> Unconfirmed</p>
+                    </div>
+
+                    <div class="critical-box">
+                        <h3 style="color: #f44336; margin-bottom: 1rem;">Primary Finding</h3>
+                        <p>The phone number +44 7918 004312 shows no verified public connection to Felix Martin. Given his high-profile positions and institutional affiliations, direct personal contact information would typically be managed through official channels rather than unattributed business profiles.</p>
+                    </div>
+
+                    <h2 class="subsection-title">Verification Methodology</h2>
+                    <div class="content-text">
+                        <p><strong>Public Records Search:</strong> Comprehensive search of business registrations, professional listings, and academic directories found no association between the number and Felix Martin.</p>
+                        
+                        <p><strong>Professional Platforms:</strong> LinkedIn, institutional websites, and professional networks show no listing of the investigated number.</p>
+                        
+                        <p><strong>Media Sources:</strong> No interviews, articles, or public statements include reference to the investigated contact number.</p>
+                        
+                        <p><strong>Institutional Channels:</strong> Official contact information routes through institutional platforms (FCA, Oxford University, 1167 Capital, RCW Literary Agency).</p>
+                    </div>
+
+                    <h2 class="subsection-title">Communication Security Assessment</h2>
+                    <div class="content-text">
+                        <p><strong>Official Communication Channels:</strong></p>
+                        <ul>
+                            <li><strong>Financial Conduct Authority:</strong> Official FCA channels for CBA Panel Chair communications</li>
+                            <li><strong>1167 Capital:</strong> Professional firm contact systems</li>
+                            <li><strong>Oxford University:</strong> Academic institutional email and contact protocols</li>
+                            <li><strong>RCW Literary Agency:</strong> Professional representation for media and speaking engagements</li>
+                            <li><strong>Reuters:</strong> Editorial contact through Reuters columnist system</li>
+                        </ul>
+                    </div>
+
+                    <div class="risk-matrix">
+                        <div class="risk-item">
+                            <div class="risk-title">Identity Verification Risk</div>
+                            <div class="risk-level risk-high">High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Unverified contact information poses significant impersonation or social engineering risks.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Communication Security</div>
+                            <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">High-profile regulatory position requires secure communication protocols.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Professional Protocol</div>
+                            <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Regulatory and academic positions typically require formal communication channels.</p>
+                        </div>
+                    </div>
+
+                    <h2 class="subsection-title">Alternative Contact Assessment</h2>
+                    <div class="content-text">
+                        <p><strong>Potential Explanations for Number:</strong></p>
+                        <ul>
+                            <li><strong>Misattribution:</strong> Number may belong to different individual with similar name or role</li>
+                            <li><strong>Personal Assistant:</strong> Could be associated with personal or professional assistant</li>
+                            <li><strong>Secondary Business:</strong> May relate to consulting activities separate from main roles</li>
+                            <li><strong>Historical Connection:</strong> Previous number no longer in use or transferred</li>
+                            <li><strong>Social Engineering:</strong> Deliberately created false association for impersonation purposes</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="subsection-title">Security Protocol Recommendations</h2>
+                    <div class="content-text">
+                        <p><strong>Verification Requirements:</strong></p>
+                        <ul>
+                            <li>Any communication attempts should utilize official institutional channels</li>
+                            <li>Direct verification through FCA, Oxford University, or 1167 Capital official contacts</li>
+                            <li>Professional reverse lookup services for comprehensive number verification</li>
+                            <li>Cross-reference with RCW Literary Agency for legitimate contact protocols</li>
+                        </ul>
+                        
+                        <p><strong>Security Considerations:</strong></p>
+                        <ul>
+                            <li>Regulatory position requires heightened security awareness</li>
+                            <li>Potential for social engineering or impersonation attempts</li>
+                            <li>Communication security protocols consistent with FCA standards</li>
+                            <li>Documentation of all contact attempts and verification steps</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3 style="color: #ff9800; margin-bottom: 1rem;">Contact Protocol Advisory</h3>
+                        <p><strong>Recommended Approach:</strong> Do not attempt contact through unverified number. Utilize official channels through FCA, Oxford University, 1167 Capital, or RCW Literary Agency for any legitimate communication requirements.</p>
+                        <p><strong>Security Alert:</strong> Unverified contact information for high-profile regulatory officials poses significant security and operational risks.</p>
+                    </div>
+
+                    <h2 class="subsection-title">Intelligence Collection Implications</h2>
+                    <div class="content-text">
+                        <p><strong>Communication Monitoring:</strong> Felix Martin's regulatory position makes him a high-value target for foreign intelligence services and private actors seeking advance policy intelligence.</p>
+                        
+                        <p><strong>Social Engineering Vulnerability:</strong> Unverified contact numbers could be part of social engineering campaigns targeting his network or attempting to impersonate him.</p>
+                        
+                        <p><strong>Operational Security:</strong> His dual regulatory and private sector roles require enhanced communication security protocols to prevent information leakage or compromise.</p>
+                        
+                        <p><strong>Network Mapping:</strong> Attempts to establish unverified contact may be part of broader intelligence collection efforts to map his professional and personal networks.</p>
+                    </div>
+                </div>
+
+                <!-- Section 6: Risk Assessment -->
+                <div class="section-content" id="risk-assessment">
+                    <div class="classification-header">
+                        Comprehensive Risk Assessment and Threat Analysis
+                    </div>
+                    
+                    <h1 class="section-title">06. Comprehensive Risk Assessment</h1>
+                    
+                    <h2 class="subsection-title">Intelligence Risk Matrix</h2>
+                    <div class="risk-matrix">
+                        <div class="risk-item">
+                            <div class="risk-title">Foreign Intelligence Target</div>
+                            <div class="risk-level risk-high">High (5/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Regulatory position and financial market access make him prime target for economic intelligence collection by foreign services.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Regulatory Capture Risk</div>
+                            <div class="risk-level risk-high">High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Substantial private financial interests while holding key regulatory position creates capture vulnerability.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Market Manipulation Potential</div>
+                            <div class="risk-level risk-high">High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Combination of regulatory knowledge and $5B+ asset management capacity enables significant market manipulation capability.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Information Asymmetry</div>
+                            <div class="risk-level risk-high">High (5/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Access to regulatory discussions before public disclosure provides substantial trading and positioning advantages.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Network Exploitation Risk</div>
+                            <div class="risk-level risk-moderate">Moderate to High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Extensive professional networks across regulatory, academic, and financial sectors create multiple exploitation vectors.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Communication Security</div>
+                            <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">High-profile position requires enhanced communication security, unverified contacts pose operational risks.</p>
+                        </div>
+                    </div>
+
+                    <h2 class="subsection-title">Threat Actor Assessment</h2>
+                    <div class="content-text">
+                        <p><strong>State-Level Actors:</strong></p>
+                        <ul>
+                            <li><strong>China:</strong> Economic intelligence collection targeting UK financial regulations and market positions</li>
+                            <li><strong>Russia:</strong> Financial warfare capabilities and disruption of Western financial systems</li>
+                            <li><strong>Iran:</strong> Circumvention of financial sanctions and access to Western banking systems</li>
+                            <li><strong>North Korea:</strong> Cryptocurrency and alternative financial system intelligence</li>
+                        </ul>
+                        
+                        <p><strong>Non-State Actors:</strong></p>
+                        <ul>
+                            <li><strong>Criminal Organizations:</strong> Financial system vulnerabilities and regulatory circumvention</li>
+                            <li><strong>Corporate Espionage:</strong> Competitive intelligence on regulatory changes and market positions</li>
+                            <li><strong>Terrorist Financing:</strong> Intelligence on financial monitoring and compliance systems</li>
+                            <li><strong>Cryptocurrency Operations:</strong> Regulatory approach to digital assets and enforcement priorities</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="subsection-title">Operational Security Vulnerabilities</h2>
+                    <div class="content-text">
+                        <p><strong>Communication Vectors:</strong></p>
+                        <ul>
+                            <li>Multiple institutional email accounts across FCA, Oxford, 1167 Capital</li>
+                            <li>Media communication through Reuters and other publications</li>
+                            <li>Academic conference and speaking engagement communications</li>
+                            <li>Client communication through fund management activities</li>
+                        </ul>
+                        
+                        <p><strong>Physical Security Considerations:</strong></p>
+                        <ul>
+                            <li>Regular travel for international conferences and speaking engagements</li>
+                            <li>Multiple office locations across London financial district</li>
+                            <li>Academic campus presence at Oxford University</li>
+                            <li>Public profile through media appearances and publications</li>
+                        </ul>
+                        
+                        <p><strong>Digital Footprint Risks:</strong></p>
+                        <ul>
+                            <li>Extensive LinkedIn network with 500+ professional connections</li>
+                            <li>Regular media publication and commentary</li>
+                            <li>Academic research and publication activities</li>
+                            <li>Fund management client reporting and communication systems</li>
+                        </ul>
+                    </div>
+
+                    <div class="critical-box">
+                        <h3 style="color: #f44336; margin-bottom: 1rem;">Critical Risk Assessment</h3>
+                        <p><strong>Primary Threat:</strong> Felix Martin represents a critical vulnerability in UK financial security architecture. His unique position combining regulatory authority with substantial private market interests creates optimal conditions for economic intelligence exploitation.</p>
+                        <p><strong>Immediate Concerns:</strong> Information asymmetry capabilities, regulatory capture potential, and extensive network access provide multiple vectors for economic intelligence collection and market manipulation.</p>
+                        <p><strong>Strategic Implications:</strong> Compromise of this position could provide adversaries with advance intelligence on UK financial policy, market positions, and regulatory enforcement priorities.</p>
+                    </div>
+
+                    <h2 class="subsection-title">Mitigation Strategy Requirements</h2>
+                    <div class="content-text">
+                        <p><strong>Enhanced Monitoring:</strong></p>
+                        <ul>
+                            <li>Continuous monitoring of communication patterns and network interactions</li>
+                            <li>Financial transaction monitoring for unusual patterns or timing</li>
+                            <li>Travel pattern analysis for potential foreign intelligence contact</li>
+                            <li>Media statement analysis for potential information leakage or coordination</li>
+                        </ul>
+                        
+                        <p><strong>Access Controls:</strong></p>
+                        <ul>
+                            <li>Enhanced vetting procedures for all professional network additions</li>
+                            <li>Compartmentalization of regulatory information access</li>
+                            <li>Regular conflict of interest reviews and disclosure requirements</li>
+                            <li>Communication security protocol enforcement</li>
+                        </ul>
+                        
+                        <p><strong>Institutional Safeguards:</strong></p>
+                        <ul>
+                            <li>Independent oversight of CBA Panel activities and recommendations</li>
+                            <li>Transparency requirements for private sector financial interests</li>
+                            <li>Regular security briefings and threat awareness training</li>
+                            <li>Formal review of appointment and continuation criteria</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Section 7: Recommendations -->
+                <div class="section-content" id="recommendations">
+                    <div class="classification-header">
+                        Strategic Recommendations and Action Items
+                    </div>
+                    
+                    <h1 class="section-title">07. Strategic Recommendations</h1>
+                    
+                    <h2 class="subsection-title">Immediate Actions Required</h2>
+                    <div class="content-text">
+                        <p><strong>Priority 1 - Security Assessment:</strong></p>
+                        <ul>
+                            <li>Conduct comprehensive security vetting review of Felix Martin's current position</li>
+                            <li>Evaluate communication security protocols for FCA CBA Panel operations</li>
+                            <li>Review access controls for regulatory information and policy discussions</li>
+                            <li>Assess potential foreign intelligence interest and contact attempts</li>
+                        </ul>
+                        
+                        <p><strong>Priority 2 - Conflict Review:</strong></p>
+                        <ul>
+                            <li>Independent review of potential conflicts between regulatory role and private financial interests</li>
+                            <li>Assessment of information asymmetry advantages and trading activity</li>
+                            <li>Review of 1167 Capital client base and potential regulatory overlaps</li>
+                            <li>Analysis of media commentary for potential policy coordination</li>
+                        </ul>
+                        
+                        <p><strong>Priority 3 - Contact Verification:</strong></p>
+                        <ul>
+                            <li>Comprehensive verification of all contact information and communication channels</li>
+                            <li>Investigation of unverified phone number (+44 7918 004312) and potential security implications</li>
+                            <li>Review of official communication protocols and adherence</li>
+                            <li>Assessment of social engineering vulnerabilities in current contact management</li>
+                        </ul>
+                    </div>
+
+                    <div class="risk-matrix">
+                        <div class="risk-item">
+                            <div class="risk-title">Security Review Urgency</div>
+                            <div class="risk-level risk-high">High (5/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Immediate comprehensive security assessment required given position sensitivity and potential vulnerabilities.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Conflict Resolution Priority</div>
+                            <div class="risk-level risk-high">High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Urgent review of potential conflicts and implementation of enhanced oversight mechanisms.</p>
+                        </div>
+                        
+                        <div class="risk-item">
+                            <div class="risk-title">Monitoring Implementation</div>
+                            <div class="risk-level risk-moderate">Moderate to High (4/5)</div>
+                            <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Enhanced monitoring systems should be implemented immediately to track potential security concerns.</p>
+                        </div>
+                    </div>
+
+                    <h2 class="subsection-title">Medium-Term Strategic Actions</h2>
+                    <div class="content-text">
+                        <p><strong>Institutional Reforms:</strong></p>
+                        <ul>
+                            <li>Review and strengthen conflict of interest policies for regulatory panel appointments</li>
+                            <li>Implement enhanced transparency requirements for CBA Panel activities</li>
+                            <li>Establish independent oversight mechanisms for regulatory panel operations</li>
+                            <li>Develop clear criteria for continuation or termination of panel appointments</li>
+                        </ul>
+                        
+                        <p><strong>Intelligence Collection:</strong></p>
+                        <ul>
+                            <li>Develop comprehensive intelligence picture of Martin's professional and personal networks</li>
+                            <li>Monitor for foreign intelligence interest or contact attempts</li>
+                            <li>Track financial market activities and potential coordination with regulatory positions</li>
+                            <li>Assess international regulatory network connections and information sharing</li>
+                        </ul>
+                        
+                        <p><strong>Risk Management:</strong></p>
+                        <ul>
+                            <li>Implement enhanced security protocols for all regulatory panel members</li>
+                            <li>Develop incident response procedures for potential compromise or influence operations</li>
+                            <li>Establish regular threat assessment and briefing procedures</li>
+                            <li>Create backup systems for critical regulatory functions in case of compromise</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="subsection-title">Long-Term Policy Recommendations</h2>
+                    <div class="content-text">
+                        <p><strong>Regulatory Architecture Review:</strong></p>
+                        <ul>
+                            <li>Comprehensive review of regulatory panel independence and accountability mechanisms</li>
+                            <li>Assessment of revolving door policies between private sector and regulatory roles</li>
+                            <li>Evaluation of information security protocols for regulatory policy development</li>
+                            <li>Review of international regulatory cooperation and information sharing agreements</li>
+                        </ul>
+                        
+                        <p><strong>Security Framework Enhancement:</strong></p>
+                        <ul>
+                            <li>Development of enhanced security vetting procedures for regulatory appointments</li>
+                            <li>Implementation of continuous monitoring systems for regulatory personnel</li>
+                            <li>Creation of threat assessment protocols specific to financial regulatory positions</li>
+                            <li>Establishment of coordination mechanisms with national security agencies</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3 style="color: #ff9800; margin-bottom: 1rem;">Implementation Considerations</h3>
+                        <p><strong>Legal Framework:</strong> Any enhanced monitoring or oversight measures must comply with data protection laws and employment regulations while balancing security requirements.</p>
+                        <p><strong>Diplomatic Implications:</strong> Changes to regulatory oversight may have implications for international regulatory cooperation and treaty obligations.</p>
+                        <p><strong>Market Stability:</strong> Implementation must consider potential impacts on market confidence and regulatory effectiveness.</p>
+                    </div>
+
+                    <h2 class="subsection-title">Resource Requirements</h2>
+                    <div class="content-text">
+                        <p><strong>Personnel:</strong></p>
+                        <ul>
+                            <li>Dedicated security assessment team for regulatory personnel monitoring</li>
+                            <li>Enhanced intelligence analysis capability for financial sector threats</li>
+                            <li>Legal and compliance specialists for conflict of interest management</li>
+                            <li>Technical specialists for communication security and monitoring systems</li>
+                        </ul>
+                        
+                        <p><strong>Technology:</strong></p>
+                        <ul>
+                            <li>Advanced monitoring systems for communication and financial transaction analysis</li>
+                            <li>Enhanced security protocols for regulatory information systems</li>
+                            <li>Intelligence analysis tools for network mapping and threat assessment</li>
+                            <li>Secure communication systems for sensitive regulatory activities</li>
+                        </ul>
+                        
+                        <p><strong>Coordination:</strong></p>
+                        <ul>
+                            <li>Enhanced liaison with national security agencies for threat intelligence</li>
+                            <li>Coordination with international partners for cross-border threat assessment</li>
+                            <li>Integration with existing financial intelligence and law enforcement systems</li>
+                            <li>Regular briefing and coordination mechanisms with Treasury and Cabinet Office</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="subsection-title">Success Metrics</h2>
+                    <div class="content-text">
+                        <p><strong>Security Metrics:</strong></p>
+                        <ul>
+                            <li>Number of potential security incidents identified and resolved</li>
+                            <li>Effectiveness of threat detection and response systems</li>
+                            <li>Compliance with enhanced security protocols and procedures</li>
+                            <li>Reduction in information asymmetry exploitation incidents</li>
+                        </ul>
+                        
+                        <p><strong>Transparency Metrics:</strong></p>
+                        <ul>
+                            <li>Enhanced disclosure compliance and conflict identification</li>
+                            <li>Public availability of regulatory panel activities and decisions</li>
+                            <li>Independent oversight effectiveness and recommendations</li>
+                            <li>Stakeholder confidence in regulatory independence and integrity</li>
+                        </ul>
+                    </div>
+
+                    <div class="critical-box">
+                        <h3 style="color: #f44336; margin-bottom: 1rem;">Strategic Assessment Conclusion</h3>
+                        <p><strong>Critical Finding:</strong> Felix Martin's position represents a significant vulnerability in UK financial regulatory architecture that requires immediate attention and enhanced oversight.</p>
+                        <p><strong>Recommended Action:</strong> Implement comprehensive security review and enhanced monitoring protocols immediately while developing long-term institutional reforms to address systemic vulnerabilities.</p>
+                        <p><strong>Strategic Priority:</strong> This case should serve as a catalyst for broader review of regulatory personnel security and conflict management across the UK financial regulatory system.</p>
+                    </div>
+
+                    <h2 class="subsection-title">Final Recommendations Summary</h2>
+                    <div class="highlight-box">
+                        <h3 style="color: #64b5f6; margin-bottom: 1rem;">Executive Summary</h3>
+                        <p><strong>Immediate Actions:</strong> Conduct security assessment, review conflicts, verify communications</p>
+                        <p><strong>Medium-Term:</strong> Implement enhanced monitoring, strengthen institutional safeguards, develop threat response capabilities</p>
+                        <p><strong>Long-Term:</strong> Reform regulatory architecture, enhance security framework, establish continuous improvement mechanisms</p>
+                        <p><strong>Contact Protocol:</strong> Utilize only verified official channels - FCA, Oxford University, 1167 Capital, or RCW Literary Agency</p>
+                        <p><strong>Security Alert:</strong> Maintain heightened awareness for potential foreign intelligence interest or influence operations targeting this position</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Login credentials for Kurt Bathalmeous
+        const validCredentials = {
+            username: 'KBATH-2847',
+            password: 'Phoenix-3Alpha-7Z'
+        };
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (username === validCredentials.username && password === validCredentials.password) {
+                // Hide login container and show disclaimer
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('disclaimerContainer').style.display = 'flex';
+                
+                // Store authentication state
+                sessionStorage.setItem('authenticated', 'true');
+            } else {
+                errorMessage.style.display = 'block';
+                // Clear form after failed attempt
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // Disclaimer checkbox functionality
+        document.getElementById('disclaimerCheckbox').addEventListener('change', function() {
+            const acceptBtn = document.getElementById('acceptBtn');
+            acceptBtn.disabled = !this.checked;
+            if (this.checked) {
+                acceptBtn.style.opacity = '1';
+                acceptBtn.style.cursor = 'pointer';
+            } else {
+                acceptBtn.style.opacity = '0.5';
+                acceptBtn.style.cursor = 'not-allowed';
+            }
+        });
+
+        // Accept disclaimer
+        function acceptDisclaimer() {
+            const checkbox = document.getElementById('disclaimerCheckbox');
+            if (checkbox.checked) {
+                document.getElementById('disclaimerContainer').style.display = 'none';
+                document.getElementById('mainPortal').style.display = 'block';
+                sessionStorage.setItem('disclaimerAccepted', 'true');
+            }
+        }
+
+        // Decline disclaimer
+        function declineDisclaimer() {
+            // Clear session and return to login
+            sessionStorage.clear();
+            document.getElementById('disclaimerContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'flex';
+            
+            // Clear login form
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Show exit message
+            alert('Access denied. You have been logged out.\n\nYou must accept the disclaimer to access the IRGIU Intelligence Platform.');
+        }
+
+        // Logout functionality
+        function logout() {
+            sessionStorage.removeItem('authenticated');
+            sessionStorage.removeItem('disclaimerAccepted');
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('mainPortal').style.display = 'none';
+            document.getElementById('disclaimerContainer').style.display = 'none';
+            
+            // Clear login form
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Reset disclaimer checkbox
+            document.getElementById('disclaimerCheckbox').checked = false;
+            document.getElementById('acceptBtn').disabled = true;
+            document.getElementById('acceptBtn').style.opacity = '0.5';
+        }
+
+        // Check authentication state on page load
+        window.addEventListener('load', function() {
+            const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
+            const disclaimerAccepted = sessionStorage.getItem('disclaimerAccepted') === 'true';
+            
+            if (isAuthenticated && disclaimerAccepted) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('disclaimerContainer').style.display = 'none';
+                document.getElementById('mainPortal').style.display = 'block';
+            } else if (isAuthenticated && !disclaimerAccepted) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('disclaimerContainer').style.display = 'flex';
+                document.getElementById('mainPortal').style.display = 'none';
+            } else {
+                document.getElementById('loginContainer').style.display = 'flex';
+                document.getElementById('disclaimerContainer').style.display = 'none';
+                document.getElementById('mainPortal').style.display = 'none';
+            }
+        });
+
+        // Mobile navigation functions
+        function toggleMobileNav() {
+            const nav = document.getElementById('navigationSidebar');
+            nav.classList.toggle('mobile-open');
+        }
+        
+        function closeMobileNav() {
+            const nav = document.getElementById('navigationSidebar');
+            nav.classList.remove('mobile-open');
+        }
+        
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+            
+            // Close mobile nav on mobile devices
+            if (window.innerWidth <= 768) {
+                closeMobileNav();
+            }
+            
+            // Scroll to top of content area
+            document.querySelector('.content-area').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('scrollProgress').style.width = scrolled + '%';
+        });
+
+        // Action functions
+        function downloadReport() {
+            // Show loading message
+            const loadingMsg = document.createElement('div');
+            loadingMsg.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(25, 30, 40, 0.95);
+                color: #64b5f6;
+                padding: 2rem;
+                border-radius: 8px;
+                border: 1px solid rgba(100, 181, 246, 0.3);
+                z-index: 9999;
+                text-align: center;
+                backdrop-filter: blur(20px);
+            `;
+            loadingMsg.innerHTML = `
+                <div style="font-size: 1.2rem; margin-bottom: 1rem;">📄 Generating PDF Report</div>
+                <div style="color: #a0a0a0;">Compiling all assessment modules...</div>
+            `;
+            document.body.appendChild(loadingMsg);
+
+            // Generate PDF after short delay for UI feedback
+            setTimeout(() => {
+                generatePDF();
+                document.body.removeChild(loadingMsg);
+            }, 1000);
+        }
+
+        function generatePDF() {
+            try {
+                // Create a new window for PDF generation
+                const printWindow = window.open('', '_blank');
+                
+                // Get current date for report
+                const currentDate = new Date().toLocaleString('en-GB', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    timeZoneName: 'short'
+                });
+
+                // Collect all content from all sections
+                const sections = [
+                    'subject-overview',
+                    'career-analysis', 
+                    'financial-influence',
+                    'regulatory-position',
+                    'contact-verification',
+                    'risk-assessment',
+                    'recommendations'
+                ];
+
+                let fullContent = '';
+                
+                sections.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        // Get the section title
+                        const titleElement = section.querySelector('.section-title');
+                        const title = titleElement ? titleElement.textContent : 'Section';
+                        
+                        // Get all content
+                        const content = section.innerHTML;
+                        fullContent += `<div class="pdf-section">${content}</div>`;
+                    }
+                });
+
+                // Create PDF-optimized HTML
+                const pdfHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>IRGIU Intelligence Assessment - Felix Martin</title>
+                    <style>
+                        @page {
+                            margin: 2cm;
+                            size: A4;
+                        }
+                        
+                        body {
+                            font-family: 'Times New Roman', serif;
+                            font-size: 11pt;
+                            line-height: 1.4;
+                            color: #000;
+                            background: white;
+                        }
+                        
+                        .pdf-header {
+                            text-align: center;
+                            border-bottom: 2px solid #000;
+                            padding-bottom: 1rem;
+                            margin-bottom: 2rem;
+                        }
+                        
+                        .classification-banner {
+                            background: #d32f2f;
+                            color: white;
+                            text-align: center;
+                            padding: 8px;
+                            font-weight: bold;
+                            font-size: 12pt;
+                            letter-spacing: 2px;
+                            margin-bottom: 1rem;
+                        }
+                        
+                        .report-title {
+                            font-size: 18pt;
+                            font-weight: bold;
+                            margin: 1rem 0;
+                        }
+                        
+                        .report-subtitle {
+                            font-size: 14pt;
+                            color: #666;
+                            margin-bottom: 0.5rem;
+                        }
+                        
+                        .report-meta {
+                            font-size: 10pt;
+                            color: #666;
+                        }
+                        
+                        .section-title {
+                            font-size: 16pt;
+                            font-weight: bold;
+                            color: #2c5282;
+                            border-bottom: 1px solid #ccc;
+                            padding-bottom: 0.5rem;
+                            margin: 2rem 0 1rem 0;
+                            page-break-after: avoid;
+                        }
+                        
+                        .subsection-title {
+                            font-size: 14pt;
+                            font-weight: bold;
+                            color: #4a5568;
+                            margin: 1.5rem 0 0.8rem 0;
+                        }
+                        
+                        .meta-grid {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                            gap: 1rem;
+                            margin: 1rem 0;
+                            page-break-inside: avoid;
+                        }
+                        
+                        .meta-item {
+                            border: 1px solid #ccc;
+                            padding: 0.8rem;
+                            background: #f8f9fa;
+                        }
+                        
+                        .meta-label {
+                            font-size: 9pt;
+                            color: #666;
+                            text-transform: uppercase;
+                            font-weight: bold;
+                            margin-bottom: 0.3rem;
+                        }
+                        
+                        .meta-value {
+                            font-weight: bold;
+                        }
+                        
+                        .content-text {
+                            margin-bottom: 1rem;
+                        }
+                        
+                        .content-text p {
+                            margin-bottom: 0.8rem;
+                        }
+                        
+                        .content-text ul {
+                            margin: 0.5rem 0 1rem 2rem;
+                        }
+                        
+                        .content-text li {
+                            margin-bottom: 0.3rem;
+                        }
+                        
+                        .employment-timeline {
+                            margin: 1rem 0;
+                        }
+                        
+                        .timeline-item {
+                            border-left: 3px solid #2c5282;
+                            padding-left: 1rem;
+                            margin-bottom: 1.5rem;
+                            page-break-inside: avoid;
+                        }
+                        
+                        .timeline-period {
+                            font-weight: bold;
+                            color: #2c5282;
+                            font-size: 10pt;
+                        }
+                        
+                        .timeline-role {
+                            font-weight: bold;
+                            margin: 0.3rem 0;
+                        }
+                        
+                        .timeline-details {
+                            font-size: 10pt;
+                            color: #555;
+                        }
+                        
+                        .risk-matrix {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                            gap: 1rem;
+                            margin: 1rem 0;
+                        }
+                        
+                        .risk-item {
+                            border: 1px solid #ccc;
+                            padding: 1rem;
+                            page-break-inside: avoid;
+                        }
+                        
+                        .risk-title {
+                            font-weight: bold;
+                            color: #2c5282;
+                            margin-bottom: 0.5rem;
+                        }
+                        
+                        .risk-level {
+                            display: inline-block;
+                            padding: 0.3rem 0.8rem;
+                            border-radius: 4px;
+                            font-size: 9pt;
+                            font-weight: bold;
+                            margin-bottom: 0.5rem;
+                        }
+                        
+                        .risk-low {
+                            background: #d4edda;
+                            color: #155724;
+                            border: 1px solid #c3e6cb;
+                        }
+                        
+                        .risk-moderate {
+                            background: #fff3cd;
+                            color: #856404;
+                            border: 1px solid #ffeaa7;
+                        }
+                        
+                        .risk-high {
+                            background: #f8d7da;
+                            color: #721c24;
+                            border: 1px solid #f5c6cb;
+                        }
+                        
+                        .highlight-box, .warning-box, .critical-box {
+                            border: 1px solid #ccc;
+                            padding: 1rem;
+                            margin: 1rem 0;
+                            page-break-inside: avoid;
+                        }
+                        
+                        .highlight-box {
+                            background: #e3f2fd;
+                            border-left: 4px solid #2196f3;
+                        }
+                        
+                        .warning-box {
+                            background: #fff8e1;
+                            border-left: 4px solid #ff9800;
+                        }
+                        
+                        .critical-box {
+                            background: #ffebee;
+                            border-left: 4px solid #f44336;
+                        }
+                        
+                        .contact-details {
+                            background: #f8f9fa;
+                            border: 1px solid #ccc;
+                            border-left: 4px solid #ff9800;
+                            padding: 1rem;
+                            margin: 1rem 0;
+                        }
+                        
+                        .pdf-section {
+                            page-break-before: auto;
+                        }
+                        
+                        .classification-header {
+                            background: #d32f2f !important;
+                            color: white !important;
+                            text-align: center;
+                            padding: 0.5rem;
+                            font-weight: bold;
+                            font-size: 10pt;
+                            margin: 2rem 0 1rem 0;
+                            -webkit-print-color-adjust: exact;
+                            print-color-adjust: exact;
+                        }
+                        
+                        /* Hide elements not needed in PDF */
+                        .scroll-indicator,
+                        .scroll-progress,
+                        .mobile-nav-toggle,
+                        .nav-close {
+                            display: none !important;
+                        }
+                        
+                        @media print {
+                            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .classification-banner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .classification-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="classification-banner">
+                        ⚠ RESTRICTED ACCESS - FINANCIAL INTELLIGENCE ASSESSMENT ⚠
+                    </div>
+                    
+                    <div class="pdf-header">
+                        <div class="report-title">IRGIU INTELLIGENCE ASSESSMENT</div>
+                        <div class="report-subtitle">Financial Intelligence Analysis: Felix Martin</div>
+                        <div class="report-meta">
+                            Generated: ${currentDate}<br>
+                            Classification: Restricted<br>
+                            Prepared by: Financial Intelligence Unit<br>
+                            Access Level: KBATH-2847 - Felix Martin Assessment Only
+                        </div>
+                    </div>
+                    
+                    ${fullContent}
+                    
+                    <div style="page-break-before: always; text-align: center; padding-top: 2rem; color: #666; font-size: 10pt;">
+                        <div class="classification-banner">
+                            ⚠ END OF DOCUMENT - RESTRICTED ACCESS ⚠
+                        </div>
+                        <p>This document contains sensitive intelligence information. Unauthorized disclosure is prohibited.</p>
+                        <p>Generated from IRGIU Intelligence Platform - User: KBATH-2847</p>
+                    </div>
+                </body>
+                </html>`;
+
+                // Write content to new window
+                printWindow.document.write(pdfHTML);
+                printWindow.document.close();
+
+                // Trigger print dialog after content loads
+                printWindow.onload = function() {
+                    setTimeout(() => {
+                        printWindow.print();
+                        // Close window after printing (user can cancel)
+                        printWindow.onafterprint = function() {
+                            printWindow.close();
+                        };
+                    }, 500);
+                };
+
+            } catch (error) {
+                alert('❌ PDF Generation Error\n\nThere was an issue generating the PDF report. Please try again or contact system administrator.\n\nError: ' + error.message);
+            }
+        }
+
+        // Deactivated functions - now handled by restricted access
+        // function printReport() - DEACTIVATED
+        // function shareReport() - DEACTIVATED
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case '1': showSection('subject-overview'); break;
+                    case '2': showSection('career-analysis'); break;
+                    case '3': showSection('financial-influence'); break;
+                    case '4': showSection('regulatory-position'); break;
+                    case '5': showSection('contact-verification'); break;
+                    case '6': showSection('risk-assessment'); break;
+                    case '7': showSection('recommendations'); break;
+                }
+            }
+        });
+
+        // Initialize disclaimer button state
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial state for accept button
+            const acceptBtn = document.getElementById('acceptBtn');
+            acceptBtn.style.opacity = '0.5';
+            acceptBtn.style.cursor = 'not-allowed';
+            
+            // Add warning for restricted features
+            document.querySelectorAll('.nav-item.restricted').forEach(item => {
+                item.addEventListener('click', function() {
+                    if (this.textContent.includes('Print Report')) {
+                        alert('🚫 PRINT ACCESS DENIED\n\nPrint functionality has been deactivated for security reasons. Download function remains available for authorized personnel.\n\nContact system administrator for alternative document access methods.');
+                    } else if (this.textContent.includes('Share')) {
+                        alert('🚫 SHARE ACCESS DENIED\n\nShare functionality has been deactivated for security reasons. This assessment is restricted to individual access only.\n\nContact system administrator for authorized sharing protocols.');
+                    } else {
+                        alert('🚫 ACCESS DENIED\n\nThis feature requires elevated clearance. Your current access is restricted to Felix Martin Financial Intelligence Assessment only.\n\nContact system administrator for access level upgrade.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
